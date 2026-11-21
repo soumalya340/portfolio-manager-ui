@@ -1,3 +1,14 @@
+/* Layer order first: reset lowest, Astryx in the middle, Tailwind utilities last. */
+@layer reset, theme, base, astryx-base, astryx-theme, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+/* Maps Tailwind utilities (bg-card, text-secondary, …) onto Astryx tokens. */
+@import "@astryxdesign/core/tailwind-theme.css";
+@import "tailwindcss/utilities.css" layer(utilities);
+
 /* The page canvas uses the active Astryx theme, including before hydration. */
 html[data-astryx-theme="gothic"] {
   color-scheme: dark;

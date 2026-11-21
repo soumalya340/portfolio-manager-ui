@@ -1,9 +1,12 @@
 export type Chain = "Solana" | "EVM" | "Sui";
-export type Filter = "All chains" | Chain;
 export type Period = "24H" | "7D" | "30D" | "90D" | "1Y";
 
 export const chains: Chain[] = ["Solana", "EVM", "Sui"];
-export const filters: Filter[] = ["All chains", ...chains];
+export const chainPaths: Record<Chain, string> = {
+  Solana: "/portfolio/solana",
+  EVM: "/portfolio/evm",
+  Sui: "/portfolio/sui",
+};
 export const periods: Period[] = ["24H", "7D", "30D", "90D", "1Y"];
 
 /** Chain labels and local logo assets used throughout the portfolio. */

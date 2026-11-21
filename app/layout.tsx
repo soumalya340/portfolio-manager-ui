@@ -1,8 +1,7 @@
+// globals.css must load first: it declares the cascade-layer order and imports Astryx + Tailwind.
+import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import "@astryxdesign/core/reset.css";
-import "@astryxdesign/core/astryx.css";
-import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {

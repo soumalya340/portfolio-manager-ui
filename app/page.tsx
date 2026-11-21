@@ -11,8 +11,7 @@ import { List, ListItem } from "@astryxdesign/core/List";
 import { Icon } from "@astryxdesign/core/Icon";
 import { useMediaQuery } from "@astryxdesign/core/hooks";
 import { ChartBarIcon, EyeSlashIcon, GlobeAltIcon, PauseIcon, PlayIcon, TableCellsIcon } from "@heroicons/react/24/outline";
-import { chains, type Chain, type Filter } from "./_portfolio/data";
-import { Orrery, chainTone } from "./_home/orrery";
+import { Orrery, chainTone, chains, type Chain, type Filter } from "./_home/orrery";
 
 const networkCopy: Record<Chain, string> = {
   Solana: "A closer look at the Solana side of the story.",
@@ -94,10 +93,9 @@ export default function Home() {
                 <HStack hAlign="between" vAlign="center" gap={4}>
                   <Text color="secondary">Choose a network to bring its orbit into focus.</Text>
                   <Button
-                    label={isPaused ? "Resume orbit" : "Pause orbit"}
+                    label={isPaused ? (isNarrow ? "Resume" : "Resume orbit") : (isNarrow ? "Pause" : "Pause orbit")}
                     variant="ghost"
                     size="sm"
-                    isIconOnly={isNarrow}
                     icon={<Icon icon={isPaused ? PlayIcon : PauseIcon} />}
                     onClick={() => setPausedByUser(!isPaused)}
                   />

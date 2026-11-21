@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@astryxdesign/core/hooks";
-import { chains, type Chain, type Filter } from "../_portfolio/data";
+export type Chain = "Solana" | "EVM" | "Sui";
+export type Filter = "All chains" | Chain;
+export const chains: Chain[] = ["Solana", "EVM", "Sui"];
 
 /** Theme palette family for each network, shared with the homepage selector. */
 export const chainTone: Record<Chain, { fill: string; ink: string; ring: string }> = {
@@ -37,7 +39,7 @@ export function Orrery({ filter, isPaused }: { filter: Filter; isPaused: boolean
 
   const isLit = (chain: Chain) => filter === "All chains" || filter === chain;
   const tilt = isNarrow ? 0.62 : 0.34;
-  const labelSize = isNarrow ? 34 : 18;
+  const labelSize = isNarrow ? 42 : 18;
   const halfHeight = Math.round((DIAL_RADIUS + 24) * tilt);
   const placed = chains
     .map((chain, index) => {
@@ -48,7 +50,7 @@ export function Orrery({ filter, isPaused }: { filter: Filter; isPaused: boolean
         depth,
         x: round(CX + Math.cos(angle) * orbitRadius[chain]),
         y: round(CY + depth * orbitRadius[chain] * tilt),
-        radius: round(24 * (0.82 + 0.18 * depth)),
+        radius: round((isNarrow ? 30 : 24) * (0.82 + 0.18 * depth)),
       };
     })
     .sort((a, b) => a.depth - b.depth);
@@ -103,12 +105,12 @@ export function Orrery({ filter, isPaused }: { filter: Filter; isPaused: boolean
 
       {placed.filter((body) => body.depth < 0).map(renderBody)}
 
-      <circle cx={CX} cy={CY} r={isNarrow ? 118 : 74} fill="url(#orbit-core-sphere)" stroke="var(--color-border-emphasized)" strokeWidth={2} filter="url(#orbit-sphere-shadow)" />
+      <circle cx={CX} cy={CY} r={isNarrow ? 132 : 74} fill="url(#orbit-core-sphere)" stroke="var(--color-border-emphasized)" strokeWidth={2} filter="url(#orbit-sphere-shadow)" />
       <ellipse cx={CX - (isNarrow ? 34 : 22)} cy={CY - (isNarrow ? 45 : 28)} rx={isNarrow ? 45 : 28} ry={isNarrow ? 20 : 12} fill="var(--color-text-primary)" opacity={0.12} filter="url(#orbit-sphere-glint)" />
-      <text x={CX} y={CY - (isNarrow ? 10 : 6)} textAnchor="middle" fontFamily="var(--font-family-body)" fontWeight={700} fontSize={isNarrow ? 42 : 25} fill="var(--color-text-primary)">
+      <text x={CX} y={CY - (isNarrow ? 10 : 6)} textAnchor="middle" fontFamily="var(--font-family-body)" fontWeight={700} fontSize={isNarrow ? 55 : 25} fill="var(--color-text-primary)">
         {filter === "All chains" ? "One view" : filter}
       </text>
-      <text x={CX} y={CY + (isNarrow ? 44 : 22)} textAnchor="middle" fontFamily="var(--font-family-body)" fontSize={isNarrow ? 29 : 14} fill="var(--color-text-secondary)">
+      <text x={CX} y={CY + (isNarrow ? 48 : 22)} textAnchor="middle" fontFamily="var(--font-family-body)" fontSize={isNarrow ? 34 : 14} fill="var(--color-text-secondary)">
         {filter === "All chains" ? "every chain" : "in focus"}
       </text>
 
