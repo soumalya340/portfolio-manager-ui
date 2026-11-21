@@ -2,87 +2,44 @@
 
 import { useState } from "react";
 import NextLink from "next/link";
-import { Show } from "@clerk/nextjs";
 import { Layout, LayoutContent, LayoutFooter, LayoutHeader, VStack, HStack } from "@astryxdesign/core/Layout";
-import { Heading, Text } from "@astryxdesign/core/Text";
+import { Text } from "@astryxdesign/core/Text";
 import { Button } from "@astryxdesign/core/Button";
-import { Card } from "@astryxdesign/core/Card";
 import { Grid } from "@astryxdesign/core/Grid";
 import { Item } from "@astryxdesign/core/Item";
 import { List, ListItem } from "@astryxdesign/core/List";
 import { Icon } from "@astryxdesign/core/Icon";
-import { Avatar } from "@astryxdesign/core/Avatar";
-import { Link } from "@astryxdesign/core/Link";
-import { Table, proportional } from "@astryxdesign/core/Table";
-import type { TableColumn } from "@astryxdesign/core/Table";
 import { useMediaQuery } from "@astryxdesign/core/hooks";
 import { ChartBarIcon, EyeSlashIcon, GlobeAltIcon, PauseIcon, PlayIcon, TableCellsIcon } from "@heroicons/react/24/outline";
-import { chainTotals, chains, holdings, money, portfolioTotal, type Chain, type Filter, type Holding } from "./_portfolio/data";
+import { chains, type Chain, type Filter } from "./_portfolio/data";
 import { Orrery, chainTone } from "./_home/orrery";
+
+const networkCopy: Record<Chain, string> = {
+  Solana: "A closer look at the Solana side of the story.",
+  EVM: "Put Ethereum and EVM assets in perspective.",
+  Sui: "Give your Sui holdings room to be seen.",
+};
 
 const inside = [
   {
     icon: GlobeAltIcon,
-    label: "Your total across every chain",
-    description: "One figure for everything you hold, with each network's share beside it.",
+    label: "See the whole picture",
+    description: "Move between a combined view and a closer look at each network.",
   },
   {
     icon: ChartBarIcon,
-    label: "Performance from 24 hours to a year",
-    description: "Switch the period to see how much the portfolio gained or lost, in dollars and percent.",
+    label: "Follow the shape of change",
+    description: "Explore the performance chart across different time ranges.",
   },
   {
     icon: TableCellsIcon,
-    label: "Every holding in one table",
-    description: "Sort by value or daily change, and search by token, symbol, or network.",
+    label: "Find what matters",
+    description: "Search assets and sort the holdings table in the portfolio preview.",
   },
   {
     icon: EyeSlashIcon,
-    label: "Hide balances",
-    description: "Mask every figure with one click when someone can see your screen.",
-  },
-];
-
-const columns: TableColumn<Holding>[] = [
-  {
-    key: "name",
-    header: "Asset",
-    width: proportional(2),
-    renderCell: (row) => (
-      <HStack gap={3} vAlign="center">
-        <Avatar name={row.symbol} size="sm" tooltip={false} />
-        <Text weight="semibold">{row.name}</Text>
-      </HStack>
-    ),
-  },
-  {
-    key: "chain",
-    header: "Network",
-    width: proportional(1),
-    renderCell: (row) => <Text color="secondary">{row.chain}</Text>,
-  },
-  {
-    key: "change",
-    header: "24h",
-    align: "end",
-    width: proportional(1),
-    renderCell: (row) => (
-      <Text color="secondary" hasTabularNumbers>
-        {row.change >= 0 ? "+" : "−"}
-        {Math.abs(row.change).toFixed(2)}%
-      </Text>
-    ),
-  },
-  {
-    key: "value",
-    header: "Value",
-    align: "end",
-    width: proportional(1),
-    renderCell: (row) => (
-      <Text weight="semibold" hasTabularNumbers>
-        {money(row.value)}
-      </Text>
-    ),
+    label: "Keep numbers to yourself",
+    description: "Hide balances with one click when you want a little privacy.",
   },
 ];
 
@@ -101,9 +58,6 @@ export default function Home() {
   const [pausedByUser, setPausedByUser] = useState<boolean | null>(null);
   const isPaused = pausedByUser ?? prefersReducedMotion;
 
-  const rows = [...(filter === "All chains" ? holdings : holdings.filter((h) => h.chain === filter))].sort((a, b) => b.value - a.value);
-  const rowsTotal = filter === "All chains" ? portfolioTotal : chainTotals[filter];
-
   return (
     <Layout
       height="auto"
@@ -115,39 +69,22 @@ export default function Home() {
             <Text type="display-3" weight="bold">
               orbit.
             </Text>
-            <HStack gap={2}>
-              <Show when="signed-out">
-                <Button label="Sign in" variant="ghost" href="/sign-in" as={NextLink} />
-                <Button label="Create account" variant="primary" href="/sign-up" as={NextLink} />
-              </Show>
-              <Show when="signed-in">
-                <Button label="Open portfolio" variant="primary" href="/portfolio" as={NextLink} />
-              </Show>
-            </HStack>
+            <Button label="Explore the preview" variant="primary" href="/portfolio" as={NextLink} />
           </HStack>
         </LayoutHeader>
       }
       content={
         <LayoutContent role="main" isScrollable={false}>
           <VStack gap={10} paddingBlock={10}>
-            <VStack gap={6} hAlign="center">
+            <VStack gap={4} hAlign="center">
               <VStack gap={4} hAlign="center" maxWidth={760}>
                 <Text as="h1" type="display-1" display="block" justify="center" textWrap="balance">
-                  Every chain you hold, in one orbit
+                  A clearer view of your crypto universe
                 </Text>
                 <Text type="large" color="secondary" justify="center" textWrap="balance">
-                  Orbit adds up your Solana, Ethereum and Sui holdings, so you can see what you own, where it sits, and how it moved.
+                  Explore a calmer way to see Solana, Ethereum and Sui together. Choose a network, follow the bigger picture, and leave the noise behind.
                 </Text>
               </VStack>
-              <Show when="signed-out">
-                <HStack gap={3}>
-                  <Button label="Create account" variant="primary" size="lg" href="/sign-up" as={NextLink} />
-                  <Button label="Sign in" variant="secondary" size="lg" href="/sign-in" as={NextLink} />
-                </HStack>
-              </Show>
-              <Show when="signed-in">
-                <Button label="Open your portfolio" variant="primary" size="lg" href="/portfolio" as={NextLink} />
-              </Show>
             </VStack>
 
             <VStack gap={6} hAlign="center">
@@ -155,7 +92,7 @@ export default function Home() {
 
               <VStack gap={4} width="100%" maxWidth={960}>
                 <HStack hAlign="between" vAlign="center" gap={4}>
-                  <Text color="secondary">Choose a chain to light up its orbit.</Text>
+                  <Text color="secondary">Choose a network to bring its orbit into focus.</Text>
                   <Button
                     label={isPaused ? "Resume orbit" : "Pause orbit"}
                     variant="ghost"
@@ -170,62 +107,28 @@ export default function Home() {
                     <Item
                       key={chain}
                       label={chain}
-                      description={`${Math.round((chainTotals[chain] / portfolioTotal) * 100)}% of the total`}
+                      description={networkCopy[chain]}
                       startContent={<ChainDot chain={chain} />}
-                      endContent={
-                        <Text weight="semibold" hasTabularNumbers>
-                          {money(chainTotals[chain])}
-                        </Text>
-                      }
                       isSelected={filter === chain}
                       onClick={() => setFilter(filter === chain ? "All chains" : chain)}
                     />
                   ))}
                 </Grid>
-
-                <Card padding={0}>
-                  <HStack hAlign="between" vAlign="center" padding={4} gap={2} wrap="wrap">
-                    <Heading level={2}>{filter === "All chains" ? "Sample holdings" : `Sample holdings on ${filter}`}</Heading>
-                    <HStack gap={3} vAlign="center">
-                      <Text color="secondary">
-                        {rows.length} assets, {money(rowsTotal)}
-                      </Text>
-                      {filter !== "All chains" && (
-                        <Button label="Show all chains" variant="ghost" size="sm" onClick={() => setFilter("All chains")} />
-                      )}
-                    </HStack>
-                  </HStack>
-                  {isNarrow ? (
-                    <List hasDividers>
-                      {rows.map((row) => (
-                        <ListItem
-                          key={row.id}
-                          label={row.name}
-                          description={row.chain}
-                          startContent={<Avatar name={row.symbol} size="sm" tooltip={false} />}
-                          endContent={
-                            <Text weight="semibold" hasTabularNumbers>
-                              {money(row.value)}
-                            </Text>
-                          }
-                        />
-                      ))}
-                    </List>
-                  ) : (
-                    <Table<Holding> data={rows} columns={columns} idKey="id" />
-                  )}
-                </Card>
+                {filter !== "All chains" && (
+                  <Button label="See every network" variant="ghost" size="sm" onClick={() => setFilter("All chains")} />
+                )}
               </VStack>
             </VStack>
 
             <Grid columns={{ minWidth: 320, max: 2 }} gap={10}>
               <VStack gap={3}>
                 <Text as="h2" type="display-2" display="block" textWrap="balance">
-                  What opens after you sign in
+                  The big picture, without the busywork
                 </Text>
                 <Text color="secondary" textWrap="pretty">
-                  The portfolio view is built around the same three chains, with a filter to look at one at a time and a table you can sort.
+                  The portfolio preview brings networks, assets and performance into one place. Explore the view and find your own way through it.
                 </Text>
+                <Button label="Explore the portfolio preview" variant="secondary" href="/portfolio" as={NextLink} />
               </VStack>
               <List hasDividers density="spacious" edge="flush">
                 {inside.map((entry) => (
@@ -244,19 +147,7 @@ export default function Home() {
       }
       footer={
         <LayoutFooter hasDivider>
-          <HStack hAlign="between" vAlign="center" gap={4}>
-            <Text color="secondary">Figures on this page are sample data.</Text>
-            <Show when="signed-out">
-              <Link href="/sign-in" as={NextLink}>
-                Sign in
-              </Link>
-            </Show>
-            <Show when="signed-in">
-              <Link href="/portfolio" as={NextLink}>
-                Open portfolio
-              </Link>
-            </Show>
-          </HStack>
+          <Text color="secondary">Orbit · A wider perspective on your portfolio.</Text>
         </LayoutFooter>
       }
     />
