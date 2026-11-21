@@ -4,7 +4,7 @@ import { AuthFrame } from "../../_portfolio/auth-frame";
 export default function SignUpPage() {
   return (
     <AuthFrame intro="Create an account to access your portfolio workspace." loading="Loading sign up…">
-      <SignUp />
+      <SignUp fallbackRedirectUrl="/portfolio" signInFallbackRedirectUrl="/portfolio" />
     </AuthFrame>
   );
 }
