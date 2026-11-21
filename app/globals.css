@@ -1,0 +1,11 @@
+/* The page canvas uses the active Astryx theme, including before hydration. */
+html[data-astryx-theme="gothic"] {
+  color-scheme: dark;
+  background: var(--color-background-body);
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-background-body);
+  color: var(--color-text-primary);
+}

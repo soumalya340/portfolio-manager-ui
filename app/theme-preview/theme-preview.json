@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "theme": null,
+  "pages": [
+    {
+      "id": "overview",
+      "label": "Overview",
+      "file": "_pages/overview"
+    },
+    {
+      "id": "components",
+      "label": "Components",
+      "file": "_pages/components"
+    }
+  ],
+  "files": [
+    "_pages/overview.tsx",
+    "_pages/components.tsx",
+    "page.tsx",
+    "theme-preview.json"
+  ],
+  "hashes": {
+    "_pages/overview.tsx": "v3:b46244d1ede89b8f",
+    "_pages/components.tsx": "v3:566112bf5c840bf3",
+    "page.tsx": "v3:8ebe72b7691977e6"
+  }
+}
