@@ -19,7 +19,7 @@ import { EmptyState } from "@astryxdesign/core/EmptyState";
 import { SegmentedControl, SegmentedControlItem } from "@astryxdesign/core/SegmentedControl";
 import { Table, proportional, useTableSortable, useTableSortableState } from "@astryxdesign/core/Table";
 import type { TableColumn } from "@astryxdesign/core/Table";
-import { ChartBarIcon, EyeIcon, Square2StackIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
+import { EyeIcon, Square2StackIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import {
   chainInfo,
   chainPaths,
@@ -34,8 +34,6 @@ import {
   type Holding,
   type Period,
 } from "./data";
-
-type Section = "overview" | "assets";
 
 function Change({ value, children }: { value: number; children?: React.ReactNode }) {
   const isUp = value >= 0;
@@ -90,7 +88,6 @@ export function Dashboard({ chain }: { chain: Chain }) {
   const [period, setPeriod] = useState<Period>("30D");
   const [isHidden, setIsHidden] = useState(false);
   const [query, setQuery] = useState("");
-  const [section, setSection] = useState<Section>("overview");
 
   const visibleTotal = chainTotals[chain];
   const scopedHoldings = holdings.filter((h) => h.chain === chain);
@@ -176,10 +173,6 @@ export function Dashboard({ chain }: { chain: Chain }) {
     },
   ];
 
-  const navItem = (id: Section, label: string, icon: typeof Squares2X2Icon) => (
-    <SideNavItem label={label} icon={icon} href={`#${id}`} isSelected={section === id} onClick={() => setSection(id)} />
-  );
-
   return (
     <AppShell
       height="fill"
@@ -196,8 +189,7 @@ export function Dashboard({ chain }: { chain: Chain }) {
           }
         >
           <SideNavSection title="Workspace">
-            {navItem("overview", "Overview", Squares2X2Icon)}
-            {navItem("assets", "Assets", ChartBarIcon)}
+            <SideNavItem label="Overview" icon={Squares2X2Icon} href="#overview" isSelected />
           </SideNavSection>
           <SideNavSection title="Networks">
             {chains.map((network) => (
@@ -242,7 +234,7 @@ export function Dashboard({ chain }: { chain: Chain }) {
             <Text type="label" color="accent">
               {chain.toUpperCase()} DASHBOARD
             </Text>
-            <Heading level={1} id="overview">{chain} portfolio</Heading>
+            <Heading level={1} id="overview">Overview</Heading>
             <Text color="secondary">{chainInfo[chain].description}. Focus on this network&apos;s assets and performance.</Text>
           </VStack>
           <Button
@@ -313,14 +305,14 @@ export function Dashboard({ chain }: { chain: Chain }) {
           </GridSpan>
         </Grid>
 
-        {/* Assets */}
+        {/* Asset values are part of this network's overview. */}
         <VStack gap={4}>
           <HStack hAlign="between" vAlign="end">
             <VStack gap={1}>
               <Text type="label" color="accent">
                 YOUR HOLDINGS
               </Text>
-              <Heading level={2} id="assets">Assets</Heading>
+              <Heading level={2}>Asset values</Heading>
             </VStack>
             <Text type="supporting" color="secondary">
               {filtered.length} of {scopedHoldings.length} assets
